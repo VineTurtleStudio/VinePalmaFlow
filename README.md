@@ -1,223 +1,246 @@
-# 🌿 VinePalmaFlow — 纯本地项目管理与协作工具
+<div align="center">
 
-> **永远不上云，但在局域网里像云一样协作。** 零账号、零上传，所有项目数据只留在你自己的设备上。
+# 🌿 VinePalmaFlow
 
-VinePalmaFlow 是一款**本地优先**的项目管理与协作桌面应用（基于 Tauri + React）：
-用表单就能完成项目（新手友好），也能用 YAML + Markdown 完全掌控数据（进阶友好）；
-项目数据是**人可读的 Markdown 文件**，一键导出 Excel / CSV / JSON，同一局域网内可加密配对后增量同步。
+**纯本地的项目管理与协作工具 — 不上云，但在局域网里像云一样协作**
 
----
+<a href="#-简体中文">简体中文</a> ·
+<a href="#-繁體中文">繁體中文</a> ·
+<a href="#-english">English</a> ·
+<a href="#-日本語">日本語</a>
 
-## 目录
-
-- [快速开始（先看这里）](#快速开始先看这里)
-- [新手 5 分钟上手](#新手-5-分钟上手)
-- [功能总览（与 PRD 对照）](#功能总览与-prd-对照)
-- [你的数据存在哪里？](#你的数据存在哪里)
-- [仓库结构](#仓库结构)
-- [给开发者](#给开发者)
-- [常见问题](#常见问题)
-- [文档与许可](#文档与许可)
+</div>
 
 ---
 
-## 快速开始（先看这里）
+## 🇨🇳 简体中文
+
+**零账号、零上传**：项目数据是你能直接打开、能用 Git 管的 **Markdown / YAML 文件**，全部留在自己的设备上。同一局域网内的设备加密配对后可以增量同步。
 
 ### 环境要求
 
-| 依赖 | 版本要求 | 说明 |
-|------|----------|------|
+| 依赖 | 版本 | 说明 |
+|---|---|---|
 | Node.js | ≥ 20（建议 20 / 22 LTS） | 前端构建 |
-| Rust | 稳定版 ≥ 1.77 | Tauri 2 后端 |
-| 操作系统 | Windows 10/11 · macOS 13+ · Ubuntu 22+ | 跨平台 |
+| Rust | ≥ 1.77 | Tauri 2 后端 |
+| 系统 | Windows 10/11 · macOS 13+ · Ubuntu 22+ | 跨平台 |
 
-### 1. 安装依赖
-
-```bash
-npm install
-```
-
-Linux 用户还需要先安装系统依赖（Debian / Ubuntu）：
+Linux 另需系统依赖：
 
 ```bash
 sudo apt install libwebkit2gtk-4.1-dev build-essential curl wget file \
-                 libssl-dev libayatana-appindicator3-dev librsvg2-dev
+  libxdo-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev
 ```
 
-### 2. 启动开发版桌面应用
+### 快速开始
 
 ```bash
+npm install
+npm run tauri dev     # 开发模式
+npm run tauri build   # 打包
+```
+
+只调界面：`npm run dev`
+
+### 五分钟上手
+
+1. 新建项目 → 填名称、负责人、起止时间（表单模式，够用就行）
+2. 需要更细的控制时，切到 YAML 模式直接改字段
+3. 任务卡片拖动排序，状态在建 / 完成 / 阻塞之间切换
+4. 右上角「导出」可导出 Excel / CSV / JSON
+5. 两台设备在同一局域网 → 配对 → 开始增量同步
+
+### 数据存在哪里
+
+```
+<项目目录>/
+  project.yaml      项目元数据
+  tasks.md          任务清单（Markdown 表格）
+  notes/            会议记录、备注
+```
+
+格式是人类可读的纯文本，可以直接进 Git 做版本管理。
+
+### 功能
+
+- **双模式编辑**：表单模式给新手，YAML + Markdown 模式给进阶用户，二者实时同步
+- **本地优先**：断网可用，所有数据在本地磁盘
+- **局域网同步**：加密配对后增量同步，不经过任何服务器
+- **导出**：Excel / CSV / JSON
+- **示例项目**：`samples/` 下有可直接打开的例子
+
+### 目录结构
+
+```
+src/           前端（React + TS）
+  components/  界面组件
+  stores/      状态管理
+src-tauri/     Rust 后端（文件读写、同步、导出）
+docs/          设计与使用文档
+samples/       示例项目
+```
+
+### 常见问题
+
+- **同步连不上**：确认两台设备在同一网段，防火墙放行应用
+- **YAML 改坏了**：切回表单模式会提示语法错误的位置；也可从 Git 恢复
+- **数据迁移**：整个项目目录拷走即可，没有数据库
+
+## 🇹🇼 繁體中文
+
+**零帳號、零上傳**：專案資料是你可以直接開啟、能用 Git 管理的 **Markdown / YAML 檔案**，全部留在自己的裝置上。同一區域網路內的裝置加密配對後可增量同步。
+
+### 環境需求
+
+| 依賴 | 版本 | 說明 |
+|---|---|---|
+| Node.js | ≥ 20（建議 20 / 22 LTS） | 前端建置 |
+| Rust | ≥ 1.77 | Tauri 2 後端 |
+| 系統 | Windows 10/11 · macOS 13+ · Ubuntu 22+ | 跨平台 |
+
+### 快速開始
+
+```bash
+npm install
 npm run tauri dev
-```
-
-首次运行会编译 Rust 后端，约需几分钟。命令会自动启动 Vite 前端并弹出桌面窗口。
-
-> 也可以 `npm run dev` 仅在浏览器预览前端界面（打开 http://localhost:1420）。
-> 但**文件读写、导入导出、局域网同步等功能依赖 Tauri 桌面环境**，预览模式无法使用，建议始终用桌面方式运行。
-
-### 3. 打包成可安装的应用
-
-```bash
 npm run tauri build
 ```
 
-安装包输出到 `src-tauri/target/release/bundle/`（Windows 为 `.msi/.exe`，macOS 为 `.dmg/.app`，Linux 为 `.deb/.AppImage`）。
+### 五分鐘上手
 
-### 4. 运行测试
+1. 新增專案 → 填名稱、負責人、起訖時間（表單模式）
+2. 需要更細的控制時切到 YAML 模式直接改欄位
+3. 任務卡片拖曳排序，狀態在進行 / 完成 / 阻塞間切換
+4. 右上角「匯出」可輸出 Excel / CSV / JSON
+5. 兩台裝置在同一網段 → 配對 → 開始增量同步
+
+### 資料位置
+
+```
+<專案目錄>/
+  project.yaml      專案中繼資料
+  tasks.md          任務清單（Markdown 表格）
+  notes/            會議記錄、備註
+```
+
+純文字格式，可直接納入 Git 版控。
+
+### 功能
+
+- **雙模式編輯**：表單給新手，YAML + Markdown 給進階使用者，雙向同步
+- **本地優先**：離線可用
+- **區域網路同步**：加密配對、增量同步，不經伺服器
+- **匯出**：Excel / CSV / JSON
+
+## 🇬🇧 English
+
+**No account, no uploads**: your project data is **Markdown / YAML you can open in any editor and version with Git**, stored entirely on your own devices. Devices on the same LAN can pair and sync incrementally.
+
+### Requirements
+
+| Dependency | Version |
+|---|---|
+| Node.js | ≥ 20 (20 / 22 LTS recommended) |
+| Rust | ≥ 1.77 |
+| OS | Windows 10/11 · macOS 13+ · Ubuntu 22+ |
+
+Linux also needs:
 
 ```bash
-npm run build            # 前端类型检查（tsc）+ 产物构建
-cd src-tauri && cargo test   # 后端单元 / 集成测试（30 项）
+sudo apt install libwebkit2gtk-4.1-dev build-essential curl wget file \
+  libxdo-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev
 ```
 
----
+### Quick start
 
-## 新手 5 分钟上手
-
-**三步完成一个项目：选模板 → 填内容 → 导出。**
-
-1. **启动应用**：首次打开会弹出引导弹窗，点「🚀 创建示例项目并开始」可立即体验；选择「普通模式」（推荐，无需任何技术背景）。
-2. **新建项目**：点左侧「＋ 新建项目」，或从欢迎页选择一个内置模板（个人 OKR、敏捷迭代看板、内容发布排期、客户跟进漏斗、产品需求池、读书笔记、家庭装修、空白项目）。
-3. **填内容**：在「表单」页签填写负责人、截止日期、优先级、进度、标签；模板自带任务列表时可用「看板」拖拽卡片改状态，「列表」看明细，「卡片」看概览。所有内容**自动保存**为本地 Markdown。
-4. **看全貌**：「正文 Markdown」写长文档；「任务文件」拆分原子任务；「附件」挂文件；随时打开「📊 工作区汇总视图」看全局进度。
-5. **交付导出**：右上角「⬆️ 导出」一键导出 Excel 周报（含条件格式 / 进度条）、Markdown、CSV 或 JSON；或通过「🔄 同步」与同一局域网内已配对的同事设备加密同步。
-6. **随时找回**：每个项目都有「🕐 历史」——自动每日快照（保留 30 天）+ 字段变更记录，可预览、可一键恢复。
-
-### 快捷键
-
-| 快捷键 | 功能 |
-|--------|------|
-| `Ctrl/Cmd + K` | 命令面板（跳转项目 / 新建 / 切模式 / 设置…） |
-| `Ctrl/Cmd + Shift + F` | 全局搜索（项目和任务全文） |
-| `Ctrl/Cmd + S` | 手动保存（通常自动保存，无需手动） |
-
-### 入口速查
-
-- 顶部工具栏：🎛️ 普通/专业模式切换 · ⬆️ 导出 · ⬇️ 导入
-- 左侧边栏底部：📊 汇总视图 · 🔄 同步 · 💡 帮助中心 · ⚙️ 设置
-- 应用内「💡 帮助中心」覆盖快速上手、两种模式、快捷键、数据位置、导入导出、局域网协作与 FAQ。
-
----
-
-## 功能总览（与 PRD 对照）
-
-> 功能规范详见 [docs/PRD.md](docs/PRD.md)。状态图例：✅ 已实现 · 🕒 路线图（未实现）
-
-| 功能模块 | 状态 | 说明 |
-|----------|------|------|
-| 双模式（普通 / 专业） | ✅ | 表单视图 ⇄ YAML+Markdown 双栏，同一数据随时切换，不丢信息 |
-| 项目管理 | ✅ | 新建 / 编辑 / 克隆 / 归档 / 删除（回收站可恢复）/ 外部文件夹链接 |
-| 模板系统 | ✅ | 内置 8 套模板；支持导入 `.localflow-template` 模板包并注册为自定义模板 |
-| 三视图（看板 / 列表 / 卡片） | ✅ | 看板支持拖拽改状态，基于模板字段定义自动生成 |
-| 任务文件 & 附件 | ✅ | `tasks/*.md` 原子任务文件、`attachments/` 附件管理 |
-| 数据导出 | ✅ | Excel（概览+任务明细+变更历史+元数据，含条件格式）、Markdown、CSV、JSON、模板导出预设、全部导出 |
-| 数据导入 | ✅ | Markdown、Excel（标准表头自动映射，含元数据 Sheet 无损还原）、Markdown 文件夹、模板包；同名项目可选覆盖/重命名/合并 |
-| 局域网协作 | ✅ | mDNS 设备发现、TLS 1.3 加密、6 位配对码、信任设备列表、增量同步、三向合并、冲突解决 UI |
-| 版本历史（Time Capsule） | ✅ | 自动每日快照（30 天 / 100 份）+ 字段变更记录，可预览与恢复 |
-| 全局搜索 | ✅ | 项目与任务全文检索（`Ctrl/Cmd + Shift + F`） |
-| 命令面板 | ✅ | `Ctrl/Cmd + K` |
-| 工作区汇总视图 | ✅ | 自动生成的跨项目仪表盘 `汇总视图.md` |
-| 主题系统 | ✅ | 亮/暗色、月度自动主题、经典预设、自定义配色 |
-| 首次引导 & 帮助中心 | ✅ | 启动引导弹窗 + 应用内帮助中心 + 示例项目 |
-| 蓝牙备用通道 | 🕒 | PRD Phase 4，未实现 |
-| 自定义导出模板引擎（Handlebars） | 🕒 | PRD Phase 4，未实现（当前预设为固定列） |
-| Git 集成钩子 / 脚本化导出插件 | 🕒 | PRD Phase 4，未实现 |
-| 模板市场 / 移动端 App | 🕒 | PRD Phase 5 / 附录待定 |
-
----
-
-## 你的数据存在哪里？
-
-一切数据都是**本地文件**，可在任意编辑器中直接打开、迁移、备份：
-
-```
-~/LocalFlowWorkspace/                  # 工作区根目录（可在「设置」中更换）
-├── .localflow/                        # 应用元数据：同步索引、模板、版本快照
-├── 项目A/                             # 每个项目一个文件夹
-│   ├── project.md                     # 主文件（YAML Front Matter + Markdown 正文）
-│   ├── tasks/                         # 子任务文件（可选）
-│   └── attachments/                   # 附件（可选）
-├── 项目B/
-└── 汇总视图.md                        # 自动生成的跨项目仪表盘
+```bash
+npm install
+npm run tauri dev
+npm run tauri build
 ```
 
-- 每个项目都是**标准 Markdown + YAML Front Matter**，人可读、可迁移。
-- 删除项目只会移入本地回收站，可随时恢复；彻底删除前会二次确认。
-- 局域网同步仅在可信设备之间通过加密通道进行，数据**不上云**。
+### Five-minute tour
 
----
+1. Create a project — name, owner, start/end dates (form mode)
+2. Switch to YAML mode when you need finer control
+3. Drag task cards to reorder; move them between in-progress / done / blocked
+4. **Export** to Excel / CSV / JSON from the top-right menu
+5. Two devices on the same LAN → pair → incremental sync
 
-## 仓库结构
+### Where the data lives
 
 ```
-VinePalmaFlow/
-├── src/                    # React 前端
-│   ├── components/         # UI 组件（编辑器、对话框、视图）
-│   ├── lib/                # 主题与字段工具
-│   ├── api.ts              # 调用 Rust 后端命令的封装
-│   ├── store.ts            # Zustand 全局状态
-│   └── types.ts            # 前后端共享的类型定义
-├── src-tauri/              # Rust 后端（Tauri 2）
-│   ├── src/
-│   │   ├── commands.rs     # Tauri 命令层（前后端接口）
-│   │   ├── workspace.rs    # 项目文件系统读写
-│   │   ├── export.rs       # 导出引擎（Excel/CSV/JSON/Markdown）
-│   │   ├── import.rs       # 导入引擎（含模板包解析）
-│   │   ├── templates.rs    # 8 套内置模板 + 自定义模板加载
-│   │   ├── net.rs / tls.rs # 局域网发现 / TLS 加密 / 配对 / 同步
-│   │   ├── sync.rs         # 增量同步与三向合并
-│   │   └── change_log.rs   # 变更记录
-│   ├── tests/              # 后端集成测试
-│   └── tauri.conf.json     # 桌面应用配置
-├── samples/                # 示例模板包（.localflow-template）
-├── docs/PRD.md             # 产品需求文档（功能规范）
-└── package.json            # 前端脚本：dev / build / tauri
+<project dir>/
+  project.yaml      project metadata
+  tasks.md          task list (Markdown table)
+  notes/            meeting notes, remarks
 ```
 
----
+Plain text, human-readable, Git-friendly.
 
-## 给开发者
+### Features
 
-### 常用命令
+- **Two editing modes** — forms for newcomers, YAML + Markdown for power users, kept in sync
+- **Local-first** — works offline; nothing leaves the disk
+- **LAN sync** — encrypted pairing, incremental transfer, no server involved
+- **Export** — Excel / CSV / JSON
+- **Sample project** — see `samples/`
 
-| 命令 | 作用 |
-|------|------|
-| `npm run dev` | 仅前端热更新（浏览器预览） |
-| `npm run build` | 前端类型检查 + 产物构建 |
-| `npm run tauri dev` | 开发模式运行桌面应用 |
-| `npm run tauri build` | 打包安装包 |
-| `npm run tauri` | Tauri CLI 透传 |
-| `cd src-tauri && cargo test` | 运行后端全部测试 |
+### Troubleshooting
 
-### 开发约定
+- **Sync cannot connect** — same subnet? check the firewall rule for the app
+- **Broken YAML** — switch back to form mode for the error location, or restore from Git
+- **Moving data** — copy the whole project folder; there is no database
 
-- **前后端接口**：前端 `src/api.ts` 通过 `invoke()` 调用 Rust 命令（见 `src-tauri/src/lib.rs` 的 `invoke_handler` 注册表）。
-- **数据格式**：所有项目数据以 `project.md`（YAML Front Matter + Markdown）为唯一事实源，导出/同步均由此生成，遵循 `docs/PRD.md` 第 5 节规范。
-- **新增功能**：先加类型（`src/types.ts`）→ Rust 命令（`commands.rs` + 注册到 `lib.rs`）→ 前端 API（`api.ts`）→ 组件。
-- **命名提醒**：产品名统一为 **VinePalmaFlow**；代码中 `LocalFlowWorkspace`、`.localflow` 等为历史代号，改动需同步更新测试与文档。
+## 🇯🇵 日本語
 
----
+**アカウント不要・アップロードなし**。プロジェクトのデータは**エディタで開ける Markdown / YAML** で、Git 管理もできます。同一 LAN 上の端末は暗号化ペアリング後に差分同期できます。
 
-## 常见问题
+### 必要なもの
 
-**不会编程，能直接用吗？** 能。下载安装包安装后即可使用，全程表单操作，无任何命令行；首次启动有引导，随时可看「帮助中心」。
+| 依存 | バージョン |
+|---|---|
+| Node.js | ≥ 20（20 / 22 LTS 推奨） |
+| Rust | ≥ 1.77 |
+| OS | Windows 10/11 · macOS 13+ · Ubuntu 22+ |
 
-**数据会丢吗？** 每次保存自动生成版本快照（保留 30 天），删除也只进回收站；项目本体是标准 Markdown，即使应用损坏也可用任意编辑器找回。
+Linux は追加パッケージが必要です。
 
-**能离线用吗？** 完全可以。一切读写都在本地文件，断网不影响任何功能。
+```bash
+sudo apt install libwebkit2gtk-4.1-dev build-essential curl wget file \
+  libxdo-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev
+```
 
-**怎么和同事协作？** 两台设备连同一 Wi-Fi，在「设置 → 局域网设备」中配对（双方核对 6 位码），配对成功后自动增量同步；无需账号、数据不出局域网。
+### クイックスタート
 
-**想换工作区目录？** 设置 → 更换目录；也可链接工作区外的任意文件夹作为「外部项目」。
+```bash
+npm install
+npm run tauri dev
+npm run tauri build
+```
 
----
+### 5 分ツアー
 
-## 文档与许可
+1. プロジェクト作成（名前・担当・期間。フォームモードで十分）
+2. 細かく制御したいときは YAML モードへ切り替え
+3. タスクカードをドラッグして並べ替え、進行中 / 完了 / ブロックを切替
+4. 右上の「エクスポート」で Excel / CSV / JSON
+5. 同じ LAN の 2 台をペアリング → 差分同期
 
-- **产品需求文档（PRD）**：`docs/PRD.md` —— 双模式架构、数据格式规范、局域网协议、开发路线图。
-- **应用内帮助中心**：打开应用 → 左侧「💡 帮助中心」。
-- **许可**：MIT（Roadmap Phase 5 计划开源发布；当前仓库尚无 LICENSE 文件，发布前补充）。
+### データの場所
 
----
+```
+<プロジェクト>/
+  project.yaml      メタデータ
+  tasks.md          タスク一覧（Markdown 表）
+  notes/            議事録・メモ
+```
 
-*Made with 🌿 · 数据主权 · 格式自由 · 轻量协作*
+プレーンテキストなので Git 管理に向きます。
+
+### 機能
+
+- **2 つの編集モード** — フォームと YAML + Markdown、双方向同期
+- **ローカルファースト** — オフラインで動作
+- **LAN 同期** — 暗号化ペアリング、差分転送、サーバー不要
+- **エクスポート** — Excel / CSV / JSON
