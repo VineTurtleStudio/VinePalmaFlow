@@ -244,3 +244,10 @@ npm run tauri build
 - **ローカルファースト** — オフラインで動作
 - **LAN 同期** — 暗号化ペアリング、差分転送、サーバー不要
 - **エクスポート** — Excel / CSV / JSON
+---
+
+## 许可 / License
+
+本项目以 [MIT](./LICENSE) 许可证发布。
+
+Licensed under the [MIT License](./LICENSE).
